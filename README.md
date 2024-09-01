@@ -58,7 +58,7 @@ Ce projet implémente un formulaire de traitement de données en utilisant le la
 
 ## Auteur
 
-- Lova, alias Kimohy
+- Kimbohy
 
 ---
 
