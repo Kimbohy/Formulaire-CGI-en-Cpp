@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -26,9 +28,8 @@ string urlDecode(const string &src) {
 string formatString(string str) {
     size_t pos = str.find('=');
     if (pos != string::npos) {
-        return str.substr(pos + 1);
+        return urlDecode(str.substr(pos + 1)); // Décoder la chaîne encodée en URL
     }
-    str = urlDecode(str); // Décoder la chaîne encodée en URL
     return str; // Retourne la chaîne non modifiée si '=' n'est pas trouvé
 }
 
@@ -129,14 +130,17 @@ int main() {
 
     string postData;
     getline(cin, postData);
-    // cout << "<p>POST data: " << postData << "</p>";
+    
+    // Décoder les données postData
+    string decodedData = urlDecode(postData);
+
     // Vérification des données POST pour déterminer l'action à effectuer
-    if (postData.find("status=long") != string::npos) {
+    if (decodedData.find("status=long") != string::npos) {
         printLongTable();
-    } else if (postData.find("name=") != string::npos) {
+    } else if (decodedData.find("name=") != string::npos) {
         ofstream file("data.txt", ios::app);
         if (file.is_open()) {
-            file << postData << endl;
+            file << decodedData << endl;
             file.close();
         } else {
             cerr << "Erreur: Impossible d'écrire dans le fichier data.txt" << endl;
