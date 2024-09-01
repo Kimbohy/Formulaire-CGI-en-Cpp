@@ -1,5 +1,3 @@
-// web cgi withe c++ of an formulary to add to an array
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -7,111 +5,117 @@
 
 using namespace std;
 
-string formatString(string str) 
-{
-    int i = 0;
-    while (str[i] != '='){
-        str = str.substr(i+1);
-    }
-    str = str.substr(1);
-    
-    return str;
-}
-
-vector<string> formatData(string data) 
-{
-    vector<string> formatedData;
-    int i = 0;
-    while (i < data.size()) {
-        string temp = "";
-        while (data[i] != '&' && i < data.size()) {
-            temp += data[i];
-            i++;
+// Fonction pour décoder les chaînes encodées en URL
+string urlDecode(const string &src) {
+    string result;
+    for (size_t i = 0; i < src.length(); i++) {
+        if (src[i] == '+') {
+            result += ' ';
+        } else if (src[i] == '%' && i + 2 < src.length()) {
+            int hex = stoi(src.substr(i + 1, 2), nullptr, 16); // Convertir le nombre hexadécimal en décimal
+            result += static_cast<char>(hex); // Convertir le nombre décimal en caractère
+            i += 2;
+        } else {
+            result += src[i];
         }
-        formatedData.push_back(temp);
-        i++;
     }
-    return formatedData;
+    return result;
 }
 
-void printLongFormatedLine(string line) 
-{
-    vector<string> data = formatData(line);
+// Fonction pour formater une chaîne en extrayant la partie après le signe '='
+string formatString(string str) {
+    size_t pos = str.find('=');
+    if (pos != string::npos) {
+        return str.substr(pos + 1);
+    }
+    str = urlDecode(str); // Décoder la chaîne encodée en URL
+    return str; // Retourne la chaîne non modifiée si '=' n'est pas trouvé
+}
 
-    for (int i = 0; i < data.size(); i++) {
-        string temp = data[i];
-        cout << "<td>" << formatString(temp) << "</td>";
+// Fonction pour formater les données sous forme de vecteur à partir d'une chaîne de données
+vector<string> formatData(string data) {
+    vector<string> formattedData;
+    size_t start = 0, end = 0;
+    while ((end = data.find('&', start)) != string::npos) {
+        formattedData.push_back(data.substr(start, end - start));
+        start = end + 1;
+    }
+    formattedData.push_back(data.substr(start)); // Ajouter la dernière partie
+    return formattedData;
+}
+
+// Fonction pour afficher les lignes formatées pour le tableau long
+void printLongFormattedLine(const string& line) {
+    vector<string> data = formatData(line);
+    for (const string& field : data) {
+        cout << "<td>" << formatString(field) << "</td>";
     }
 }
 
-void printShortFormatedLine(string line) 
-{
+// Fonction pour afficher les lignes formatées pour le tableau court
+void printShortFormattedLine(const string& line) {
     vector<string> data = formatData(line);
-
-    cout << "<td>" << formatString(data[0]) << "</td>";
-    cout << "<td>" << formatString(data[3]) << "</td>";
+    if (data.size() > 3) { // Vérifier s'il y a assez de champs
+        cout << "<td>" << formatString(data[0]) << "</td>"; // Nom
+        cout << "<td>" << formatString(data[3]) << "</td>"; // Pays
+    }
 }
 
-void printLongTable()
-{
-    int i = 0 ;
-    cout << "<table border='1'>";
-    cout << "<tr>";
-    cout << "<th>Name</th>";
-    cout << "<th>Age</th>";
-    cout << "<th>City</th>";
-    cout << "<th>Country</th>";
-    cout << "<th>Email</th>";
-    cout << "</tr>";
-
+// Fonction pour afficher le tableau long
+void printLongTable() {
     ifstream file("data.txt");
-    string line;
-    while (getline(file, line)) 
-    {
-        cout << "<tr>";
-        printLongFormatedLine(line);
-        cout << "</tr>";
-        i++;
+    if (!file.is_open()) {
+        cerr << "Erreur: Impossible d'ouvrir le fichier data.txt" << endl;
+        return;
     }
-    if (i != 0){
-        cout << "<form action='index.cgi' method='post'>";
-        cout << "<input type='hidden' name='status' value='short'>";
-        cout << "<input type='submit' value='Short'>";
-        cout << "</form>";
-    }
-}
 
-void printShortTable()
-{
-    int i = 0;
-
-    ifstream file2("data.txt");
-    string line;
     cout << "<table border='1'>";
-    cout << "<tr>";
-    cout << "<th>Name</th>";
-    cout << "<th>Country</th>";
-    cout << "</tr>";
-    while (getline(file2, line)) 
-    {
+    cout << "<tr><th>Name</th><th>Age</th><th>City</th><th>Country</th><th>Email</th></tr>";
+
+    string line;
+    while (getline(file, line)) {
         cout << "<tr>";
-        printShortFormatedLine(line);
+        printLongFormattedLine(line);
         cout << "</tr>";
-        i++;
-    }
-    if (i != 0){
-        cout << "<form action='index.cgi' method='post'>";
-        cout << "<input type='hidden' name='status' value='long'>";
-        cout << "<input type='submit' value='Long'>";
-        cout << "</form>";
     }
     cout << "</table>";
-    file2.close();
+    
+    file.close();
+
+    cout << "<form action='index.cgi' method='post'>";
+    cout << "<input type='hidden' name='status' value='short'>";
+    cout << "<input type='submit' value='Short'>";
+    cout << "</form>";
 }
 
-int main() 
-{
-    int i = 0;
+// Fonction pour afficher le tableau court
+void printShortTable() {
+    ifstream file2("data.txt");
+    if (!file2.is_open()) {
+        cerr << "Erreur: Impossible d'ouvrir le fichier data.txt" << endl;
+        return;
+    }
+
+    cout << "<table border='1'>";
+    cout << "<tr><th>Name</th><th>Country</th></tr>";
+
+    string line;
+    while (getline(file2, line)) {
+        cout << "<tr>";
+        printShortFormattedLine(line);
+        cout << "</tr>";
+    }
+    cout << "</table>";
+    
+    file2.close();
+
+    cout << "<form action='index.cgi' method='post'>";
+    cout << "<input type='hidden' name='status' value='long'>";
+    cout << "<input type='submit' value='Long'>";
+    cout << "</form>";
+}
+
+int main() {
     cout << "Content-type: text/html; charset=utf-8\n\n";
     cout << "<html><head><title>Form</title></head><body>";
     cout << "<form action='index.cgi' method='post'>";
@@ -125,21 +129,20 @@ int main()
 
     string postData;
     getline(cin, postData);
-    cout << "postData: " << postData << endl;
-    if (postData == "status=long"){
+    // cout << "<p>POST data: " << postData << "</p>";
+    // Vérification des données POST pour déterminer l'action à effectuer
+    if (postData.find("status=long") != string::npos) {
         printLongTable();
-    }
-    else 
-    // if the first part of the string is equal to "name="
-    if (postData.substr(0, 5) == "name=")
-    {
+    } else if (postData.find("name=") != string::npos) {
         ofstream file("data.txt", ios::app);
-        file << postData << endl;
-        file.close();
+        if (file.is_open()) {
+            file << postData << endl;
+            file.close();
+        } else {
+            cerr << "Erreur: Impossible d'écrire dans le fichier data.txt" << endl;
+        }
         printShortTable();
-    }
-    else
-    {
+    } else {
         printShortTable();
     }
 
