@@ -28,7 +28,7 @@ Ce projet implémente un formulaire de traitement de données en utilisant le la
 1. Clonez ce dépôt sur votre machine locale:
 
     ```bash
-    git clone https://github.com/votre-utilisateur/votre-repo.git
+    git clone https://github.com/Kimbohy/Formulaire-CGI-en-Cpp.git
     ```
 
 2. Compilez le projet en utilisant un compilateur C++:
@@ -58,7 +58,7 @@ Ce projet implémente un formulaire de traitement de données en utilisant le la
 
 ## Auteur
 
-- Lova, alias Kim
+- Lova, alias Kimohy
 
 ---
 
