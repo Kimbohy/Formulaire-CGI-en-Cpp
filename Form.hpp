@@ -19,6 +19,7 @@ public:
     void printLongTable();
     void printShortTable();
     void setData(string data);
+    void removeLine(const string& sline);
 private:
     string data;
 };

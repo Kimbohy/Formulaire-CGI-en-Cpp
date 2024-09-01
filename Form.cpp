@@ -30,6 +30,7 @@ string Form::formatString(string str) {
     return str; // Retourne la chaîne non modifiée si '=' n'est pas trouvé
 }
 
+// Formater les données en un vecteur de chaînes
 vector<string> Form::formatData(string data) {
     vector<string> formattedData;
     size_t start = 0, end = 0;
@@ -41,11 +42,16 @@ vector<string> Form::formatData(string data) {
     return formattedData;
 }
 
+// Print une ligne formatée dans un tableau HTML
 void Form::printLongFormattedLine(const string& line) {
     vector<string> data = formatData(line);
     for (const string& field : data) {
         cout << "<td>" << formatString(field) << "</td>";
     }
+    cout << "<td><form action='index.cgi' method='post'>";
+    cout << "<input type='hidden' name='status' value='remove'>";
+    cout << "<input type='hidden' name='line' value='" << line << "'>";
+    cout << "<input type='submit' value='Remove'></form></td>";
 }
 
 void Form::printShortFormattedLine(const string& line) {
@@ -129,4 +135,39 @@ Form::~Form()
 
 void Form::setData(string data) {
     this->data = data;
+}
+
+void Form::removeLine(const string& sline) {
+    ifstream inputFile("data.txt"); // Fichier d'entrée
+    if (!inputFile.is_open()) {
+        cerr << "Erreur: Impossible d'ouvrir le fichier " << "data.txt" << endl;
+        return;
+    }
+
+    vector<string> lines;
+    string line;
+
+    // Lire toutes les lignes du fichier d'entrée
+    while (getline(inputFile, line)) {
+        // Ajouter uniquement les lignes qui ne contiennent pas la sline spécifique
+        if (line.find(sline) == string::npos) {
+            lines.push_back(line);
+        }
+    }
+
+    inputFile.close();
+
+    // Réouvrir le fichier en mode d'écriture pour le mettre à jour
+    ofstream outputFile("data.txt");
+    if (!outputFile.is_open()) {
+        cerr << "Erreur: Impossible d'ouvrir le fichier pour écriture " << "data.txt" << endl;
+        return;
+    }
+
+    // Écrire les lignes filtrées dans le fichier
+    for (const string& outputLine : lines) {
+        outputFile << outputLine << endl;
+    }
+
+    outputFile.close();
 }
