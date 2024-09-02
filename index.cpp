@@ -1,6 +1,4 @@
 #include "./Form.hpp"
-#include <fstream>
-#include <iostream>
 
 using namespace std;
 
@@ -15,7 +13,9 @@ int main() {
     // Vérification des données POST pour déterminer l'action à effectuer
     if (decodedData.find("status=long") != string::npos) {
         form.printLongTable();
-    } else if (decodedData.find("status=remove") != string::npos) {
+    } 
+    else if (decodedData.find("status=remove") != string::npos) 
+    {
         string lineRequest = form.formatString(decodedData);
         string line = lineRequest.substr(lineRequest.find("line=") + 5);
         form.removeLine(line);

@@ -1,40 +1,47 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <fstream>
 #include "./Form.hpp"
 
 using namespace std;
 
-string Form::urlDecode(const string &src) {
+string Form::urlDecode(const string &src) 
+{
     string result;
-    for (size_t i = 0; i < src.length(); i++) {
-        if (src[i] == '+') {
+    for (size_t i = 0; i < src.length(); i++) 
+    {
+        if (src[i] == '+') 
+        {
             result += ' ';
-        } else if (src[i] == '%' && i + 2 < src.length()) {
+        } 
+        else if (src[i] == '%' && i + 2 < src.length()) 
+        {
             int hex = stoi(src.substr(i + 1, 2), nullptr, 16); // Convertir le nombre hexadécimal en décimal
             result += static_cast<char>(hex); // Convertir le nombre décimal en caractère
             i += 2;
-        } else {
+        } 
+        else 
+        {
             result += src[i];
         }
     }
     return result;
 }
 
-string Form::formatString(string str) {
+string Form::formatString(string str) 
+{
     size_t pos = str.find('=');
-    if (pos != string::npos) {
+    if (pos != string::npos) 
+    {
         return urlDecode(str.substr(pos + 1)); // Décoder la chaîne encodée en URL
     }
     return str; // Retourne la chaîne non modifiée si '=' n'est pas trouvé
 }
 
 // Formater les données en un vecteur de chaînes
-vector<string> Form::formatData(string data) {
+vector<string> Form::formatData(string data) 
+{
     vector<string> formattedData;
     size_t start = 0, end = 0;
-    while ((end = data.find('&', start)) != string::npos) {
+    while ((end = data.find('&', start)) != string::npos) 
+    {
         formattedData.push_back(data.substr(start, end - start));
         start = end + 1;
     }
@@ -43,28 +50,35 @@ vector<string> Form::formatData(string data) {
 }
 
 // Print une ligne formatée dans un tableau HTML
-void Form::printLongFormattedLine(const string& line) {
+void Form::printLongFormattedLine(const string& line) 
+{
     vector<string> data = formatData(line);
-    for (const string& field : data) {
+    for (const string& field : data) 
+    {
         cout << "<td>" << formatString(field) << "</td>";
     }
+
     cout << "<td><form action='index.cgi' method='post'>";
     cout << "<input type='hidden' name='status' value='remove'>";
     cout << "<input type='hidden' name='line' value='" << line << "'>";
     cout << "<input type='submit' value='Remove'></form></td>";
 }
 
-void Form::printShortFormattedLine(const string& line) {
+void Form::printShortFormattedLine(const string& line) 
+{
     vector<string> data = formatData(line);
-    if (data.size() > 3) { // Vérifier s'il y a assez de champs
+    if (data.size() > 3) // Vérifier s'il y a assez de champs
+    { 
         cout << "<td>" << formatString(data[0]) << "</td>"; // Nom
         cout << "<td>" << formatString(data[3]) << "</td>"; // Pays
     }
 }
 
-void Form::printLongTable() {
+void Form::printLongTable() 
+{
     ifstream file("data.txt");
-    if (!file.is_open()) {
+    if (!file.is_open()) 
+    {
         cerr << "Erreur: Impossible d'ouvrir le fichier data.txt" << endl;
         return;
     }
@@ -73,7 +87,8 @@ void Form::printLongTable() {
     cout << "<tr><th>Name</th><th>Age</th><th>City</th><th>Country</th><th>Email</th></tr>";
 
     string line;
-    while (getline(file, line)) {
+    while (getline(file, line)) 
+    {
         cout << "<tr>";
         printLongFormattedLine(line);
         cout << "</tr>";
@@ -88,9 +103,11 @@ void Form::printLongTable() {
     cout << "</form>";
 }
 
-void Form::printShortTable() {
+void Form::printShortTable() 
+{
     ifstream file2("data.txt");
-    if (!file2.is_open()) {
+    if (!file2.is_open()) 
+    {
         cerr << "Erreur: Impossible d'ouvrir le fichier data.txt" << endl;
         return;
     }
@@ -99,7 +116,8 @@ void Form::printShortTable() {
     cout << "<tr><th>Name</th><th>Country</th></tr>";
 
     string line;
-    while (getline(file2, line)) {
+    while (getline(file2, line)) 
+    {
         cout << "<tr>";
         printShortFormattedLine(line);
         cout << "</tr>";
@@ -133,11 +151,13 @@ Form::~Form()
     cout << "</body></html>";
 }
 
-void Form::setData(string data) {
+void Form::setData(string data) 
+{
     this->data = data;
 }
 
-void Form::removeLine(const string& sline) {
+void Form::removeLine(const string& sline) 
+{
     ifstream inputFile("data.txt"); // Fichier d'entrée
     if (!inputFile.is_open()) {
         cerr << "Erreur: Impossible d'ouvrir le fichier " << "data.txt" << endl;
@@ -148,9 +168,11 @@ void Form::removeLine(const string& sline) {
     string line;
 
     // Lire toutes les lignes du fichier d'entrée
-    while (getline(inputFile, line)) {
+    while (getline(inputFile, line)) 
+    {
         // Ajouter uniquement les lignes qui ne contiennent pas la sline spécifique
-        if (line.find(sline) == string::npos) {
+        if (line.find(sline) == string::npos) 
+        {
             lines.push_back(line);
         }
     }
@@ -159,13 +181,15 @@ void Form::removeLine(const string& sline) {
 
     // Réouvrir le fichier en mode d'écriture pour le mettre à jour
     ofstream outputFile("data.txt");
-    if (!outputFile.is_open()) {
+    if (!outputFile.is_open()) 
+    {
         cerr << "Erreur: Impossible d'ouvrir le fichier pour écriture " << "data.txt" << endl;
         return;
     }
 
     // Écrire les lignes filtrées dans le fichier
-    for (const string& outputLine : lines) {
+    for (const string& outputLine : lines) 
+    {
         outputFile << outputLine << endl;
     }
 
