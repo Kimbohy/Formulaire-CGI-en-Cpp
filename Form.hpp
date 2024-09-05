@@ -26,6 +26,7 @@ public:
     void addData(const string& sline);
     void modifyData(const string &sline, const string &newLine);
     void modificationPage(const string &sline);
+    void printWarningEmptySection();
 
 private:
     string data;

@@ -1,4 +1,5 @@
 #include "./Form.hpp"
+#include "Form.hpp"
 
 using namespace std;
 
@@ -284,6 +285,10 @@ void Form::addData(const string& sline)
             cout << "<h2 class='erreur'>Erreur: Impossible d'écrire dans le fichier data.txt </h2>" << endl;
         }
     }
+    if (sline.find("=&") != string::npos)
+    {
+        printWarningEmptySection();
+    }
     if (sline.size() == 32) {
         cout << "<h2 class='erreur'>Erreur: Les données sont vide </h2>" << endl;
     }
@@ -295,6 +300,14 @@ void Form::modifyData(const string& sline, const string& newLine)
     string line;
     vector<string> lines;
     bool found = false;
+    if (newLine.size() == 32) {
+        cout << "<h2 class='erreur'>Erreur: Les données sont vide </h2>" << endl;
+        return;
+    }
+    if (newLine.find("=&") != string::npos)
+    {
+        printWarningEmptySection();
+    }
     
     // Lire chaque ligne du fichier et edditer la ligne spécifique puis l'ajouter au vecteur
     while (getline(file, line)) {
@@ -379,4 +392,9 @@ void Form::modificationPage(const string& sline)
     cout << "<input type='submit' value='Back' class='submit-btn'>";
     cout << "</form>";
     
+}
+
+void Form::printWarningEmptySection()
+{
+    cout << "<h2 class='erreur'>Warning: Données données manquantes </h2>" << endl;
 }
