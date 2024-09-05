@@ -2,7 +2,8 @@
 
 using namespace std;
 
-int main() {
+int main() 
+{
     Form form;
     string postData;
     getline(cin, postData);
@@ -26,6 +27,21 @@ int main() {
         form.removeLine(line);
         form.printLongTable();
     } 
+    else if (decodedData.find("status=edditing") != string::npos)         // Si la requête est de type edditing
+    {
+        string lineRequest = form.formatString(decodedData);
+        string newLine = lineRequest.substr(lineRequest.find("name="),lineRequest.find("line=")-10);
+        string line = lineRequest.substr(lineRequest.find("line=") + 5);
+
+        form.modifyData(line, newLine);
+        form.printLongTable();
+    }
+    else if (decodedData.find("status=eddit") != string::npos)         // Si la requête est de type eddit
+    {
+        string lineRequest = form.formatString(decodedData);
+        string line = lineRequest.substr(lineRequest.find("line=") + 5);
+        form.modificationPage(line);
+    }
     else if (decodedData.find("name=") != string::npos)                 // Si la requête est de type add
     {
         form.addData(decodedData);

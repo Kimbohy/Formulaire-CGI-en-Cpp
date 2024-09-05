@@ -1,21 +1,110 @@
-.mainForm {
-    background-color: bisque;
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-    height: 250px;
-    justify-content: space-between;
-    padding: 20px;
-    border-radius: 20px;
-  }
-
-.mainForm input {
-    border-radius: 10px;
-    border-style: none;
-    padding: 10px;
+body {
+  font-family: Arial, sans-serif;
 }
 
-.submit {
-    background-color: rgb(121, 112, 112);
-    color: aliceblue;
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.header-row {
+  background-color: #f2f2f2;
+}
+
+.header-cell,
+.data-cell {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.data-row:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.action-cell {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+}
+
+.add-form,
+.nav-form,
+.toggle-form {
+  margin: 20px 0;
+}
+
+.input-field {
+  margin: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.submit-btn,
+.add-btn,
+.remove-btn,
+.eddit-btn,
+.toggle-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+.remove-btn {
+  background-color: #f44336;
+}
+
+.remove-btn:hover {
+  background-color: #e53935;
+}
+
+.eddit-btn {
+  background-color: #2196f3;
+}
+
+.eddit-btn:hover {
+  background-color: #1e88e5;
+}
+
+.navigation {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.add-form,
+.navig-form {
+  margin-top: 20px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.erreur {
+  color: red;
+  font-size: 0.8em;
 }

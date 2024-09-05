@@ -24,8 +24,12 @@ public:
     void setData(string data);
     void removeLine(const string& sline);
     void addData(const string& sline);
+    void modifyData(const string &sline, const string &newLine);
+    void modificationPage(const string &sline);
+
 private:
     string data;
 };
+
 
 #endif
