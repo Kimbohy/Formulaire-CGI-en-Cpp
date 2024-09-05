@@ -64,6 +64,14 @@ void Form::printLongFormattedLine(const string& line)
     cout << "<input type='submit' value='Remove'></form></td>";
 }
 
+void Form::printNavigation()
+{
+    cout << "<form action='index.cgi' method='post'>";
+    cout << "<input type='hidden' name='status' value='adding'>";
+    cout << "<input type='submit' value='Add'>";
+    cout << "</form>";
+}
+
 void Form::printShortFormattedLine(const string& line) 
 {
     vector<string> data = formatData(line);
@@ -101,6 +109,8 @@ void Form::printLongTable()
     cout << "<input type='hidden' name='status' value='short'>";
     cout << "<input type='submit' value='Short'>";
     cout << "</form>";
+
+    printNavigation();
 }
 
 void Form::printShortTable() 
@@ -130,13 +140,14 @@ void Form::printShortTable()
     cout << "<input type='hidden' name='status' value='long'>";
     cout << "<input type='submit' value='Long'>";
     cout << "</form>";
+
+    printNavigation();
 }
 
-Form::Form()
+void Form::printForm() 
 {
-    cout << "Content-type: text/html; charset=utf-8\n\n";
-    cout << "<html><head><title>Form</title></head><body>";
-    cout << "<form action='index.cgi' method='post'>" << endl;
+    cout << "<form action='index.cgi' method='post'>";
+    cout << "<input type='hidden' name='status' value='adding'>";
     cout << "<input type='text' name='name' placeholder='Name'>";
     cout << "<input type='number' name='age' placeholder='Age'>";
     cout << "<input type='text' name='city' placeholder='City'>";
@@ -144,6 +155,17 @@ Form::Form()
     cout << "<input type='text' name='email' placeholder='Email'>";
     cout << "<input type='submit' value='Add'>";
     cout << "</form>";
+
+    cout << "<form action='index.cgi' method='post'>";
+    cout << "<input type='hidden' name='status' value='short'>";
+    cout << "<input type='submit' value='back'>";
+}
+
+Form::Form()
+{
+    cout << "Content-type: text/html; charset=utf-8\n\n";
+    cout << "<html><head><title>Form</title>";
+    cout << "<link rel='stylesheet' href='style.css'></head><body>";
 }
 
 Form::~Form()
@@ -194,4 +216,31 @@ void Form::removeLine(const string& sline)
     }
 
     outputFile.close();
+}
+
+void Form::addData(const string& sline) 
+{
+    ifstream file("data.txt");
+    string line;
+    bool found = false;
+
+    // Lire le fichier pour vérifier si la ligne existe déjà
+    while (getline(file, line)) {
+        if (line.find(sline) != string::npos) {
+            found = true;
+            break;  // Sortir de la boucle dès que la ligne est trouvée
+        }
+    }
+    file.close();
+
+    // Si la ligne n'a pas été trouvée, l'ajouter à la fin du fichier
+    if (!found) {
+        ofstream file2("data.txt", ios::app);
+        if (file2.is_open()) {
+            file2 << sline << endl;
+            file2.close();
+        } else {
+            cout << "Erreur: Impossible d'écrire dans le fichier data.txt" << endl;
+        }
+    }
 }

@@ -1,0 +1,21 @@
+.mainForm {
+    background-color: bisque;
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 250px;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+.mainForm input {
+    border-radius: 10px;
+    border-style: none;
+    padding: 10px;
+}
+
+.submit {
+    background-color: rgb(121, 112, 112);
+    color: aliceblue;
+}

@@ -11,27 +11,28 @@ int main() {
     string decodedData = form.urlDecode(postData);
 
     // Vérification des données POST pour déterminer l'action à effectuer
-    if (decodedData.find("status=long") != string::npos) {
+    if (decodedData.find("status=adding") != string::npos)         // Si la requête est de type adding
+    {
+        form.printForm();
+    }
+    else if (decodedData.find("status=long") != string::npos)                // Si la requête est de type long
+    {
         form.printLongTable();
     } 
-    else if (decodedData.find("status=remove") != string::npos) 
+    else if (decodedData.find("status=remove") != string::npos)         // Si la requête est de type remove
     {
         string lineRequest = form.formatString(decodedData);
         string line = lineRequest.substr(lineRequest.find("line=") + 5);
         form.removeLine(line);
         form.printLongTable();
     } 
-    else if (decodedData.find("name=") != string::npos) {
-        ofstream file("data.txt", ios::app);
-        if (file.is_open()) {
-            file << decodedData << endl;
-            file.close();
-        } else {
-            cout << "Erreur: Impossible d'écrire dans le fichier data.txt" << endl;
-        }
+    else if (decodedData.find("name=") != string::npos)                 // Si la requête est de type add
+    {
+        form.addData(decodedData);
         form.printShortTable();
     }
-     else {
+    else                                                                // Si la requête est de type short
+    {
         form.printShortTable();
     }
 
