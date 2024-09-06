@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
-
+#include <regex> 
 using namespace std;
 
 class Form {

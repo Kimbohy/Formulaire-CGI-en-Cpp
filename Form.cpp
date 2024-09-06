@@ -95,7 +95,7 @@ void Form::printLongTable()
     ifstream file("data.txt");
     if (!file.is_open()) 
     {
-        cerr << "<h2 class='erreur'>Erreur: Impossible d'ouvrir le fichier data.txt</h2>" << endl;
+        cerr << "<h2 class='erreur'>Erreur: Can't open data.txt</h2>" << endl;
         return;
     }
 
@@ -130,7 +130,7 @@ void Form::printShortTable()
     ifstream file2("data.txt");
     if (!file2.is_open()) 
     {
-        cerr << "<h2 class='erreur'>Erreur: Impossible d'ouvrir le fichier data.txt</h2>" << endl;
+        cerr << "<h2 class='erreur'>Erreur: Can't open data.txt</h2>" << endl;
         return;
     }
 
@@ -223,7 +223,7 @@ void Form::removeLine(const string& sline)
 {
     ifstream inputFile("data.txt"); // Fichier d'entrée
     if (!inputFile.is_open()) {
-        cerr << "<h2 class='erreur'>Erreur: Impossible d'ouvrir le fichier " << "data.txt </h2>" << endl;
+        cerr << "<h2 class='erreur'>Erreur: Can't open data.txt " << "data.txt </h2>" << endl;
         return;
     }
 
@@ -246,7 +246,7 @@ void Form::removeLine(const string& sline)
     ofstream outputFile("data.txt");
     if (!outputFile.is_open()) 
     {
-        cerr << "<h2 class='erreur'>Erreur: Impossible d'ouvrir le fichier pour écriture " << "data.txt </h2>" << endl;
+        cerr << "<h2 class='erreur'>Erreur: Can't write in data.txt " << "data.txt </h2>" << endl;
         return;
     }
 
@@ -259,40 +259,41 @@ void Form::removeLine(const string& sline)
     outputFile.close();
 }
 
-void Form::addData(const string& sline) 
-{
-    ifstream file("data.txt");
-    string line;
-    bool found = false;
-    // cout << sline.size() << endl;
+// void Form::addData(const string& sline) 
+// {
+//     ifstream file("data.txt");
+//     string line;
+//     bool found = false;
+//     // cout << sline.size() << endl;
 
-    // Lire le fichier pour vérifier si la ligne existe déjà
-    while (getline(file, line)) {
-        if (line.find(sline) != string::npos) {
-            found = true;
-            break;  // Sortir de la boucle dès que la ligne est trouvée
-        }
-    }
-    file.close();
+//     // Lire le fichier pour vérifier si la ligne existe déjà
+//     while (getline(file, line)) {
+//         if (line.find(sline) != string::npos) {
+//             found = true;
+//             cout << "<h2 class='erreur'>Erreur: Line already exists </h2>" << endl;
+//             break;  // Sortir de la boucle dès que la ligne est trouvée
+//         }
+//     }
+//     file.close();
 
-    // Si la ligne n'a pas été trouvée, l'ajouter à la fin du fichier
-    if (!found && sline.size() > 32) {
-        ofstream file2("data.txt", ios::app);
-        if (file2.is_open()) {
-            file2 << sline << endl;
-            file2.close();
-        } else {
-            cout << "<h2 class='erreur'>Erreur: Impossible d'écrire dans le fichier data.txt </h2>" << endl;
-        }
-    }
-    if (sline.find("=&") != string::npos)
-    {
-        printWarningEmptySection();
-    }
-    if (sline.size() == 32) {
-        cout << "<h2 class='erreur'>Erreur: Les données sont vide </h2>" << endl;
-    }
-}
+//     // Si la ligne n'a pas été trouvée, l'ajouter à la fin du fichier
+//     if (sline.find("=&") != string::npos)
+//     {
+//         printWarningEmptySection();
+//     }
+//     else if (!found && sline.size() > 32) {
+//         ofstream file2("data.txt", ios::app);
+//         if (file2.is_open()) {
+//             file2 << sline << endl;
+//             file2.close();
+//         } else {
+//             cout << "<h2 class='erreur'>Erreur: Can't write in data.txt </h2>" << endl;
+//         }
+//     }
+//     if (sline.size() == 32) {
+//         cout << "<h2 class='erreur'>Erreur: Les données sont vide </h2>" << endl;
+//     }
+// }
 
 void Form::modifyData(const string& sline, const string& newLine) 
 {
@@ -304,7 +305,7 @@ void Form::modifyData(const string& sline, const string& newLine)
         cout << "<h2 class='erreur'>Erreur: Les données sont vide </h2>" << endl;
         return;
     }
-    if (newLine.find("=&") != string::npos)
+    else if (newLine.find("=&") != string::npos)
     {
         printWarningEmptySection();
     }
@@ -323,7 +324,7 @@ void Form::modifyData(const string& sline, const string& newLine)
 
     if (!found) 
     {
-        cout << "<h2 class='erreur'>Erreur: La ligne spécifiée n'a pas été trouvée </h2>" << endl;
+        cout << "<h2 class='erreur'>Erreur: Line not found </h2>" << endl;
         return;
     }
     else {
@@ -336,7 +337,7 @@ void Form::modifyData(const string& sline, const string& newLine)
         }
         file2.close();
     } else {
-        cout << "<h2 class='erreur'>Erreur: Impossible d'écrire dans le fichier data.txt </h2>" << endl;
+        cout << "<h2 class='erreur'>Erreur: Can't write in data.txt </h2>" << endl;
     }
     }
 }
@@ -396,5 +397,91 @@ void Form::modificationPage(const string& sline)
 
 void Form::printWarningEmptySection()
 {
-    cout << "<h2 class='erreur'>Warning: Données données manquantes </h2>" << endl;
+    cout << "<h2 class='erreur'>Warning: Empty cell added </h2>" << endl;
+}
+
+
+bool isValidName(const string& name) 
+{
+    // Vérifier si le nom ne contient que des lettres et des espaces
+    return !name.empty() && regex_match(name, regex("^[A-Za-z ]+$"));
+}
+
+bool isValidAge(const string& age) 
+{
+    try {
+        int ageNum = stoi(age);
+        return ageNum > 0 && ageNum <= 120;
+    }
+    catch (invalid_argument& e)
+    {
+        return false; 
+    }
+}
+
+bool isValidEmail(const string& email) 
+{
+    const regex emailPattern("^[\\w.%+-]+@[\\w.-]+\\.[A-Za-z]{2,}$");
+    return regex_match(email, emailPattern);
+}
+
+void Form::addData(const string& sline) 
+{
+    vector<string> data = formatData(sline);
+
+    if (data.size() < 5) {
+        cout << "<h2 class='erreur'>Erreur: Incomplete data </h2>" << endl;
+        return;
+    }
+
+    string name = formatString(data[0]);
+    string age = formatString(data[1]);
+    string city = formatString(data[2]);
+    string country = formatString(data[3]);
+    string email = formatString(data[4]);
+
+    if (!isValidName(name)) {
+        cout << "<h2 class='erreur'>Erreur: Invalid name </h2>" << endl;
+        return;
+    }
+    if (!isValidAge(age)) {
+        cout << "<h2 class='erreur'>Erreur: Invalid age </h2>" << endl;
+        return;
+    }
+    if (city.empty()) {
+        cout << "<h2 class='erreur'>Erreur: City is required </h2>" << endl;
+        return;
+    }
+    if (country.empty()) {
+        cout << "<h2 class='erreur'>Erreur: Country is required </h2>" << endl;
+        return;
+    }
+    if (!isValidEmail(email)) {
+        cout << "<h2 class='erreur'>Erreur: Invalid email format </h2>" << endl;
+        return;
+    }
+
+    // Proceed with checking for duplicates and adding data
+    ifstream file("data.txt");
+    string line;
+    bool found = false;
+
+    while (getline(file, line)) {
+        if (line.find(sline) != string::npos) {
+            found = true;
+            cout << "<h2 class='erreur'>Erreur: Line already exists </h2>" << endl;
+            break;
+        }
+    }
+    file.close();
+
+    if (!found) {
+        ofstream file2("data.txt", ios::app);
+        if (file2.is_open()) {
+            file2 << sline << endl;
+            file2.close();
+        } else {
+            cout << "<h2 class='erreur'>Erreur: Can't write in data.txt </h2>" << endl;
+        }
+    }
 }
