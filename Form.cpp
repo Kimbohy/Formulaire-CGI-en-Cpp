@@ -1,4 +1,3 @@
-#include "./Form.hpp"
 #include "Form.hpp"
 
 using namespace std;
@@ -201,7 +200,6 @@ void Form::printForm()
     cout << "</form>";
 }
 
-
 Form::Form()
 {
     cout << "Content-type: text/html; charset=utf-8\n\n";
@@ -259,142 +257,6 @@ void Form::removeLine(const string& sline)
     outputFile.close();
 }
 
-// void Form::addData(const string& sline) 
-// {
-//     ifstream file("data.txt");
-//     string line;
-//     bool found = false;
-//     // cout << sline.size() << endl;
-
-//     // Lire le fichier pour vérifier si la ligne existe déjà
-//     while (getline(file, line)) {
-//         if (line.find(sline) != string::npos) {
-//             found = true;
-//             cout << "<h2 class='erreur'>Erreur: Line already exists </h2>" << endl;
-//             break;  // Sortir de la boucle dès que la ligne est trouvée
-//         }
-//     }
-//     file.close();
-
-//     // Si la ligne n'a pas été trouvée, l'ajouter à la fin du fichier
-//     if (sline.find("=&") != string::npos)
-//     {
-//         printWarningEmptySection();
-//     }
-//     else if (!found && sline.size() > 32) {
-//         ofstream file2("data.txt", ios::app);
-//         if (file2.is_open()) {
-//             file2 << sline << endl;
-//             file2.close();
-//         } else {
-//             cout << "<h2 class='erreur'>Erreur: Can't write in data.txt </h2>" << endl;
-//         }
-//     }
-//     if (sline.size() == 32) {
-//         cout << "<h2 class='erreur'>Erreur: Les données sont vide </h2>" << endl;
-//     }
-// }
-
-void Form::modifyData(const string& sline, const string& newLine) 
-{
-    ifstream file("data.txt");
-    string line;
-    vector<string> lines;
-    bool found = false;
-    if (newLine.size() == 32) {
-        cout << "<h2 class='erreur'>Erreur: Les données sont vide </h2>" << endl;
-        return;
-    }
-    else if (newLine.find("=&") != string::npos)
-    {
-        printWarningEmptySection();
-    }
-    
-    // Lire chaque ligne du fichier et edditer la ligne spécifique puis l'ajouter au vecteur
-    while (getline(file, line)) {
-        if (line.find(sline) != string::npos) 
-        {
-            lines.push_back(newLine);
-            found = true;
-        } else {
-            lines.push_back(line);
-        }
-    }
-    file.close();
-
-    if (!found) 
-    {
-        cout << "<h2 class='erreur'>Erreur: Line not found </h2>" << endl;
-        return;
-    }
-    else {
-
-    // Réouvrir le fichier en mode d'écriture pour le mettre à jour
-    ofstream file2("data.txt");
-    if (file2.is_open()) {
-        for (const string& outputLine : lines) {
-            file2 << outputLine << endl;
-        }
-        file2.close();
-    } else {
-        cout << "<h2 class='erreur'>Erreur: Can't write in data.txt </h2>" << endl;
-    }
-    }
-}
-
-// Un formulaire deja rempli par les données à modifier
-void Form::modificationPage(const string& sline)
-{
-    string name = sline.substr(sline.find("name=") + 5, sline.find("age=") -6);
-    string age = sline.substr(sline.find("age=") + 4, sline.find("city=") - sline.find("age=") - 5);
-    string city = sline.substr(sline.find("city=") + 5, sline.find("country=") - sline.find("city=") - 6);
-    string country = sline.substr(sline.find("country=") + 8, sline.find("email=") - sline.find("country=") - 9);
-    string email = sline.substr(sline.find("email=") + 6);
-
-    // cout << sline << endl;
-    cout << "<form action='index.cgi' method='post' class='add-form'>";
-    cout << "<input type='hidden' name='status' value='edditing'>";
-
-    cout << "<div class='form-group'>";
-    cout << "<label for='name'>Name:</label>";
-    cout << "<input type='text' id='name' class='input-field' name='name' placeholder='Enter your name' value='" << name << "'>";
-    cout << "</div>";
-    
-    cout << "<div class='form-group'>";
-    cout << "<label for='age'>Age:</label>";
-    cout << "<input type='number' id='age' class='input-field' name='age' placeholder='Enter your age' value='" << age << "'>";
-    cout << "</div>";
-    
-    cout << "<div class='form-group'>";
-    cout << "<label for='city'>City:</label>";
-    cout << "<input type='text' id='city' class='input-field' name='city' placeholder='Enter your city' value='" << city << "'>";
-    cout << "</div>";
-    
-    cout << "<div class='form-group'>";
-    cout << "<label for='country'>Country:</label>";
-    cout << "<input type='text' id='country' class='input-field' name='country' placeholder='Enter your country' value='" << country << "'>";
-    cout << "</div>";
-    
-    cout << "<div class='form-group'>";
-    cout << "<label for='email'>Email:</label>";
-    cout << "<input type='email' id='email' class='input-field' name='email' placeholder='Enter your email' value='" << email << "'>";
-    cout << "</div>";
-
-    cout << "<input type='hidden' name='line' value='" << sline << "'>";
-    
-    cout << "<div class='form-group'>";
-    cout << "<input type='submit' class='submit-btn' value='Change'>";
-    cout << "</div>";
-    
-    cout << "</form>";
-
-    cout << "<form action='index.cgi' method='post' class='navig-form'>";
-    cout << "<input type='hidden' name='status' value='long'>";
-    cout << "<input type='submit' value='Back' class='submit-btn'>";
-    cout << "</form>";
-    
-}
-
 void Form::printWarningEmptySection()
 {
     cout << "<h2 class='erreur'>Warning: Empty cell added </h2>" << endl;
@@ -409,19 +271,13 @@ bool isValidName(const string& name)
 
 bool isValidAge(const string& age) 
 {
-    try {
-        int ageNum = stoi(age);
-        return ageNum > 0 && ageNum <= 120;
-    }
-    catch (invalid_argument& e)
-    {
-        return false; 
-    }
+    return !age.empty() && regex_match(age, regex("^[0-9]+$"));
 }
 
 bool isValidEmail(const string& email) 
 {
-    const regex emailPattern("^[\\w.%+-]+@[\\w.-]+\\.[A-Za-z]{2,}$");
+    // [\\w.%+-] : regex pour les caractères autorisés dans le nom d'utilisateur 
+    const regex emailPattern("^[\\w.+-]+@[\\w.-]+\\.[A-Za-z]{2,}$");
     return regex_match(email, emailPattern);
 }
 
@@ -483,5 +339,144 @@ void Form::addData(const string& sline)
         } else {
             cout << "<h2 class='erreur'>Erreur: Can't write in data.txt </h2>" << endl;
         }
+    }
+}
+
+// Un formulaire deja rempli par les données à modifier
+void Form::modificationPage(const string& sline)
+{
+    string name = sline.substr(sline.find("name=") + 5, sline.find("age=") -6);
+    string age = sline.substr(sline.find("age=") + 4, sline.find("city=") - sline.find("age=") - 5);
+    string city = sline.substr(sline.find("city=") + 5, sline.find("country=") - sline.find("city=") - 6);
+    string country = sline.substr(sline.find("country=") + 8, sline.find("email=") - sline.find("country=") - 9);
+    string email = sline.substr(sline.find("email=") + 6);
+
+    // cout << sline << endl;
+    cout << "<form action='index.cgi' method='post' class='add-form'>";
+    cout << "<input type='hidden' name='status' value='edditing'>";
+
+    cout << "<div class='form-group'>";
+    cout << "<label for='name'>Name:</label>";
+    cout << "<input type='text' id='name' class='input-field' name='name' placeholder='Enter your name' value='" << name << "'>";
+    cout << "</div>";
+    
+    cout << "<div class='form-group'>";
+    cout << "<label for='age'>Age:</label>";
+    cout << "<input type='number' id='age' class='input-field' name='age' placeholder='Enter your age' value='" << age << "'>";
+    cout << "</div>";
+    
+    cout << "<div class='form-group'>";
+    cout << "<label for='city'>City:</label>";
+    cout << "<input type='text' id='city' class='input-field' name='city' placeholder='Enter your city' value='" << city << "'>";
+    cout << "</div>";
+    
+    cout << "<div class='form-group'>";
+    cout << "<label for='country'>Country:</label>";
+    cout << "<input type='text' id='country' class='input-field' name='country' placeholder='Enter your country' value='" << country << "'>";
+    cout << "</div>";
+    
+    cout << "<div class='form-group'>";
+    cout << "<label for='email'>Email:</label>";
+    cout << "<input type='email' id='email' class='input-field' name='email' placeholder='Enter your email' value='" << email << "'>";
+    cout << "</div>";
+
+    cout << "<input type='hidden' name='line' value='" << sline << "'>";
+    
+    cout << "<div class='form-group'>";
+    cout << "<input type='submit' class='submit-btn' value='Change'>";
+    cout << "</div>";
+    
+    cout << "</form>";
+
+    cout << "<form action='index.cgi' method='post' class='navig-form'>";
+    cout << "<input type='hidden' name='status' value='long'>";
+    cout << "<input type='submit' value='Back' class='submit-btn'>";
+    cout << "</form>";
+    
+}
+
+void Form::modifyData(const string& sline, const string& newLine) 
+{
+    ifstream file("data.txt");
+    string line;
+    vector<string> lines;
+    bool found = false;
+
+    vector<string> data = formatData(newLine);
+
+    if (data.size() < 5) {
+        cout << "<h2 class='erreur'>Erreur: Incomplete data </h2>" << endl;
+        return;
+    }
+
+    string name = formatString(data[0]);
+    string age = formatString(data[1]);
+    string city = formatString(data[2]);
+    string country = formatString(data[3]);
+    string email = formatString(data[4]);
+
+
+    if (!isValidName(name)) {
+        cout << "<h2 class='erreur'>Erreur: Invalid name </h2>" << endl;
+        return;
+    }
+    if (!isValidAge(age)) {
+        cout << "<h2 class='erreur'>Erreur: Invalid age </h2>" << endl;
+        return;
+    }
+    if (city.empty()) {
+        cout << "<h2 class='erreur'>Erreur: City is required </h2>" << endl;
+        return;
+    }
+    if (country.empty()) {
+        cout << "<h2 class='erreur'>Erreur: Country is required </h2>" << endl;
+        return;
+    }
+    if (!isValidEmail(email)) {
+        cout << "<h2 class='erreur'>Erreur: Invalid email format </h2>" << endl;
+        return;
+    }
+
+    if (newLine.size() == 32) {
+        cout << "<h2 class='erreur'>Erreur: Les données sont vide </h2>" << endl;
+        return;
+    }
+    else if (newLine.find("=&") != string::npos)
+    {
+        printWarningEmptySection();
+    }
+    
+    // Lire chaque ligne du fichier et edditer la ligne spécifique puis l'ajouter au vecteur
+    while (getline(file, line)) {
+        if (line.find(sline) != string::npos) 
+        {
+            lines.push_back(newLine);
+            found = true;
+        } else {
+            lines.push_back(line);
+        }
+    }
+    file.close();
+
+    if (!found) 
+    {
+        cout << "<h2 class='erreur'>Erreur: Line not found </h2>" << endl;
+        return;
+    }
+    else {
+
+    // Réouvrir le fichier en mode d'écriture pour le mettre à jour
+    ofstream file2("data.txt");
+    if (file2.is_open()) {
+        for (const string& outputLine : lines) 
+        {
+            file2 << outputLine << endl;
+        }
+        file2.close();
+    } 
+    else 
+    {
+        cout << "<h2 class='erreur'>Erreur: Can't write in data.txt </h2>" << endl;
+    }
     }
 }
