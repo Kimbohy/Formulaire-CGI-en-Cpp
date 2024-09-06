@@ -67,7 +67,7 @@ void Form::printLongFormattedLine(const string& line)
     cout << "<form action='index.cgi' method='post'>";
     cout << "<input type='hidden' name='status' value='eddit'>";
     cout << "<input type='hidden' name='line' value='" << line << "'>";
-    cout << "<input type='submit' class='eddit-btn' value='Eddite'></form></td>";
+    cout << "<input type='submit' class='eddit-btn' value='Edit'></form></td>";
     cout << "</div>";
 
 }
@@ -186,7 +186,7 @@ void Form::printForm()
     
     cout << "<div class='form-group'>";
     cout << "<label for='email'>Email:</label>";
-    cout << "<input type='text' id='email' class='input-field' name='email' placeholder='Enter your email'>";
+    cout << "<input type='email' id='email' class='input-field' name='email' placeholder='Enter your email'>";
     cout << "</div>";
     
     cout << "<div class='form-group'>";
@@ -376,7 +376,7 @@ void Form::modificationPage(const string& sline)
     
     cout << "<div class='form-group'>";
     cout << "<label for='email'>Email:</label>";
-    cout << "<input type='text' id='email' class='input-field' name='email' placeholder='Enter your email' value='" << email << "'>";
+    cout << "<input type='email' id='email' class='input-field' name='email' placeholder='Enter your email' value='" << email << "'>";
     cout << "</div>";
 
     cout << "<input type='hidden' name='line' value='" << sline << "'>";
