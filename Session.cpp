@@ -1,99 +1,105 @@
-#include "Session.hpp"
+#include <string>
+#include <iostream>
+#include <fstream>
 
-// Helper function to extract a specific cookie value from environment variables
-std::string Session::getCookieValue(const std::string& cookieName) {
-    char* cookieEnv = getenv("HTTP_COOKIE");
-    if (cookieEnv) {
-        std::string cookieStr = cookieEnv;
-        size_t pos = 0;
-        while ((pos = cookieStr.find(";")) != std::string::npos) {
-            std::string token = cookieStr.substr(0, pos);
-            size_t equalPos = token.find("=");
-            if (equalPos != std::string::npos) {
-                std::string name = token.substr(0, equalPos);
-                std::string value = token.substr(equalPos + 1);
-                if (name == cookieName) {
-                    return value;
-                }
-            }
-            cookieStr.erase(0, pos + 1);
+using namespace std;
+
+// User class
+class User {
+private:
+    string username;
+    string password;
+
+public:
+    User(string username, string password) : username(username), password(password) {}
+
+    string getUsername() { return username; }
+    string getPassword() { return password; }
+    void setUsername(string username) { this->username = username; }
+    void setPassword(string password) { this->password = password; }
+
+    bool isValidPassword() {
+        // find in the file pass.txt if the password is correct
+        ifstream file("pass.txt");
+        if (!file.is_open()) {
+            cout << "Error opening file" << endl;
+            return false;
         }
-    }
-    return "";
-}
+        string line;
+        while (getline(file, line)) {
 
-// Helper function to check if a specific cookie exists
-bool Session::hasCookie(const std::string& cookieName) {
-    return !getCookieValue(cookieName).empty();
-}
-
-// Set a session cookie with the specified value
-void Session::setSessionCookie(const std::string& value) {
-    sessionValue = value;
-    std::cout << "Set-Cookie: " << cookieName << "=" << sessionValue << "; HttpOnly; Path=/\r\n\r\n";
-    std::cout << "Content-Type: text/html\r\n\r\n";
-}
-
-// Retrieve session cookie from the request (if exists)
-std::string Session::getSessionCookie() {
-    if (hasCookie(cookieName)) {
-        return getCookieValue(cookieName);
-    }
-    return "";
-}
-
-// Invalidate the session by removing the cookie
-void Session::invalidateSession() {
-    sessionValue = "";
-    std::cout << "Set-Cookie: " << cookieName << "=; HttpOnly; Path=/; Max-Age=0\r\n";
-}
-
-// method to cout a form for the login
-void Session::coutLogin(){
-    std::cout<< "Content-type: text/html; charset=utf-8\n\n";
-
-    std::cout << "<html><head><title>Form</title>";
-    std::cout << "<link rel='stylesheet' href='style.css'></head><body>";
-
-    std::cout<< "<form action='index.cgi' method='post' class='add-form'>";
-    std::cout<< "<input type='hidden' name='status' value='login'>";
-    std::cout<< "<div class='form-group'>";
-    std::cout<< "<label for='name'>Name:</label>";
-    std::cout<< "<input type='text' id='name' class='input-field' name='name' placeholder='Enter your name'>";
-    std::cout<< "</div>";
-    std::cout<< "<div class='form-group'>";
-    std::cout<< "<label for='password'>Password:</label>";
-    std::cout<< "<input type='password' id='password' class='input-field' name='password' placeholder='Enter your password'>";
-    std::cout<< "</div>";
-    std::cout<< "<div class='form-group'>";
-    std::cout<< "<input type='submit' class='submit-btn' value='Login'>";
-    std::cout<< "</div>";
-    std::cout<< "</form>";
-}
-
-// method to cout a form for the logout
-void Session::coutLogout(){
-    std::cout<< "<form action='index.cgi' method='post' class='add-form'>";
-    std::cout<< "<input type='hidden' name='status' value='logout'>";
-    std::cout<< "<div class='form-group'>";
-    std::cout<< "<input type='submit' class='submit-btn' value='Logout'>";
-    std::cout<< "</div>";
-    std::cout<< "</form>";
-}
-
-// method to check if the login and password are in the pass.txt
-bool Session::isInTheData(const std::string login, const std::string password){
-    std::string line;
-    std::ifstream file("pass.txt");
-    while (getline(file, line)) {
-        if (line.find(login) != std::string::npos && line.find(password) != std::string::npos) { // nedd to by fixed later 
+            if (line.find(username + ":" + password) != string::npos && username != "" && password != "") {
             return true;
+            }
         }
+        return false;
     }
-    return false;
-}
+};
 
-Session::Session(const std::string& name){
-    cookieName = name;
-    sessionValue = "";
+// Session class
+class Session {
+private:
+    User user;
+
+public:
+    Session(User user) : user(user) {}
+
+    string getUsername() { return user.getUsername(); }
+
+    bool isValid() { return user.isValidPassword(); } 
+};
+
+int main() {
+    string username, password, request;
+
+    // Display the login form
+    cout << "Content-type: text/html\r\n\r\n";
+    cout << "<link rel='stylesheet' href='style.css'></head><body>";
+    cout << "<html><body>";
+    cout << "<form action='login.cgi' method='post' class='add-form' >";
+
+    cout << "<div class='form-group'>";
+    cout << "<label for='username'>Username:</label>";
+    cout << "<input type='text' name='username'>";
+    cout << "</div>";
+
+    cout << "<div class='form-group'>";
+    cout << "<label for='password'>Password:</label>";
+    cout << "<input type='password' name='password'>";
+    cout << "</div>";
+
+    cout << "<div class='form-group'>";
+    cout << "<input type='submit' value='Login' class='submit-btn'>";
+    cout << "</div>";
+
+    cout << "</form>";
+    cout << "</body></html>";
+
+    // Handle the login form submission
+    cin >> request; //username=test&password=test
+    size_t pos = request.find("&");
+    username = request.substr(0, pos);
+    password = request.substr(pos + 1);
+    username = username.substr(username.find("=") + 1);
+    password = password.substr(password.find("=") + 1);
+    
+    User user(username, password);
+    Session session(user);
+    if (session.isValid()) {
+        // Set the session cookie (not implemented in this example)
+        // cout << "Content-type: text/html\r\n\r\n";
+        cout << "<html><body>";
+        // redirection to index.cgi
+        cout << "<script>window.location.replace('setSession.cgi?session=" << username << "');</script>";
+        cout << "</body></html>";
+    } else if (username != "" && password != "")
+     {
+        // Invalid login credentials
+        // cout << "Content-type: text/html\r\n\r\n";
+        cout << "<html><body>";
+        cout << "Invalid login credentials. Please try again.";
+        cout << "</body></html>";
+    }
+
+    return 0;
 }
