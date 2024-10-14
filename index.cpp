@@ -76,9 +76,16 @@ int main()
         form.addData(decodedData);
         form.printShortTable();
     }
-    else if (decodedData.find("status=short") != string::npos)         // If the request is of type short
+    else 
+    // if (decodedData.find("status=short") != string::npos)         // If the request is of type short
     {
-        form.printShortTable();
+        if (session.hasCookie("admin")) {
+            form.printNavigation();
+            std::cout << "<h2 class='error'>error: Invalid login or password </h2>" << endl;
+            // form.printShortTable();
+        } else {
+            session.coutLogin();
+        }
     }
 
     return 0;

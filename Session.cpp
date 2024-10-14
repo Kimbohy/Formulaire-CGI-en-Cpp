@@ -50,7 +50,11 @@ void Session::invalidateSession() {
 
 // method to cout a form for the login
 void Session::coutLogin(){
-    // std::cout << "Content-type: text/html; charset=utf-8\n\n";
+    std::cout<< "Content-type: text/html; charset=utf-8\n\n";
+
+    std::cout << "<html><head><title>Form</title>";
+    std::cout << "<link rel='stylesheet' href='style.css'></head><body>";
+
     std::cout<< "<form action='index.cgi' method='post' class='add-form'>";
     std::cout<< "<input type='hidden' name='status' value='login'>";
     std::cout<< "<div class='form-group'>";
@@ -92,10 +96,4 @@ bool Session::isInTheData(const std::string login, const std::string password){
 Session::Session(const std::string& name){
     cookieName = name;
     sessionValue = "";
-    // if the session is already set in the cookie, we keep it
-    if (hasCookie(cookieName)) {
-        setSessionCookie(sessionValue);
-    } else {
-        this->coutLogin();
-    }
 }

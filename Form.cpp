@@ -73,6 +73,11 @@ void Form::printLongFormattedLine(const string& line)
 
 void Form::printNavigation()
 {
+    // Afficher le type de contenu et l'en-tête HTML
+    cout << "Content-type: text/html; charset=utf-8\n\n";
+    cout << "<html><head><title>Form</title>";
+    cout << "<link rel='stylesheet' href='style.css'></head><body>";
+
     cout << "<form action='index.cgi' method='post' class='nav-form'>";
     cout << "<input type='hidden' name='status' value='adding'>";
     cout << "<input type='submit' class='add-btn' value='Add'>";
@@ -97,6 +102,10 @@ void Form::printLongTable()
         cerr << "<h2 class='error'>error: Can't open data.txt</h2>" << endl;
         return;
     }
+        // Afficher le type de contenu et l'en-tête HTML
+    cout << "Content-type: text/html; charset=utf-8\n\n";
+    cout << "<html><head><title>Form</title>";
+    cout << "<link rel='stylesheet' href='style.css'></head><body>";
 
     cout << "<table class='data-table'>";
     cout << "<tr class='header-row'><th class='header-cell'>Name</th><th class='header-cell'>Age</th><th class='header-cell'>City</th><th class='header-cell'>Country</th><th class='header-cell'>Email</th></tr>";
@@ -126,6 +135,7 @@ void Form::printLongTable()
 
 void Form::printShortTable() 
 {
+
     int count = 0;
     ifstream file2("data.txt");
     if (!file2.is_open()) 
@@ -168,6 +178,12 @@ void Form::printShortTable()
 
 void Form::printForm() 
 {
+
+    // Afficher le type de contenu et l'en-tête HTML
+    cout << "Content-type: text/html; charset=utf-8\n\n";
+    cout << "<html><head><title>Form</title>";
+    cout << "<link rel='stylesheet' href='style.css'></head><body>";
+
     cout << "<form action='index.cgi' method='post' class='add-form'>";
     
     cout << "<div class='form-group'>";
@@ -209,9 +225,6 @@ void Form::printForm()
 
 Form::Form()
 {
-    // cout << "Content-type: text/html; charset=utf-8\n\n";
-    cout << "<html><head><title>Form</title>";
-    cout << "<link rel='stylesheet' href='style.css'></head><body>";
 }
 
 Form::~Form()
@@ -359,6 +372,12 @@ void Form::modificationPage(const string& sline)
     string email = sline.substr(sline.find("email=") + 6);
 
     // cout << sline << endl;
+
+    // Afficher le type de contenu et l'en-tête HTML
+    cout << "Content-type: text/html; charset=utf-8\n\n";
+    cout << "<html><head><title>Form</title>";
+    cout << "<link rel='stylesheet' href='style.css'></head><body>";
+
     cout << "<form action='index.cgi' method='post' class='add-form'>";
     cout << "<input type='hidden' name='status' value='edditing'>";
 
