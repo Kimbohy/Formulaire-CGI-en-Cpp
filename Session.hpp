@@ -12,11 +12,12 @@ private:
     std::string cookieName;
     std::string sessionValue;
 
-    // Helper function to extract cookies from environment variables
-    std::map<std::string, std::string> parseCookies();
-
 public:
     Session(const std::string& name);
+
+    std::string getCookieValue(const std::string &cookieName);
+
+    bool hasCookie(const std::string &cookieName);
 
     // Set a session cookie with the specified value
     void setSessionCookie(const std::string& value);

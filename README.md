@@ -27,21 +27,21 @@ Ce projet implémente un formulaire de traitement de données en utilisant le la
 
 1. Clonez ce dépôt sur votre machine locale:
 
-    ```bash
-    git clone https://github.com/Kimbohy/Formulaire-CGI-en-Cpp.git
-    ```
+   ```bash
+   git clone https://github.com/Kimbohy/Formulaire-CGI-en-Cpp.git
+   ```
 
 2. Compilez le projet en utilisant un compilateur C++:
 
-    ```bash
-    g++ -o index.cgi main.cpp Form.cpp
-    ```
+   ```bash
+   g++ -o index.cgi main.cpp Form.cpp
+   ```
 
 3. Assurez-vous que le fichier exécutable `index.cgi` a les permissions appropriées pour être exécuté par le serveur web:
 
-    ```bash
-    chmod +x index.cgi
-    ```
+   ```bash
+   chmod +x index.cgi
+   ```
 
 4. Placez `index.cgi` et les autres fichiers nécessaires (comme `data.txt` s'il existe) dans le répertoire CGI de votre serveur HTTP.
 
@@ -53,7 +53,7 @@ Ce projet implémente un formulaire de traitement de données en utilisant le la
 
 ## Avertissement
 
-- Assurez-vous que `data.txt` a les permissions nécessaires pour la lecture et l'écriture, afin d'éviter des erreurs de fichier.
+- Assurez-vous que `data.txt` a les permissions nécessaires pour la lecture et l'écriture, afin d'éviter des errors de fichier.
 - Ce projet est conçu à des fins éducatives et n'est pas optimisé pour les environnements de production.
 
 ## Auteur
@@ -62,4 +62,4 @@ Ce projet implémente un formulaire de traitement de données en utilisant le la
 
 ---
 
-Si vous avez des questions ou des suggestions, n'hésitez pas à ouvrir une *issue* ou à me contacter directement. Merci d'utiliser ce projet!
+Si vous avez des questions ou des suggestions, n'hésitez pas à ouvrir une _issue_ ou à me contacter directement. Merci d'utiliser ce projet!

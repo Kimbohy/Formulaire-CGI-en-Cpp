@@ -1,26 +1,47 @@
 #include "Form.hpp"
+#include "Session.hpp"
 
 using namespace std;
 
-int main() 
+int main()
 {
+    cout << "Content-type: text/html; charset=utf-8\n\n";
+    Session session("admin");
     Form form;
     string postData;
     getline(cin, postData);
-    // Décoder les données postData
+    // Decode the postData
     form.setData(postData);
     string decodedData = form.urlDecode(postData);
 
-    // Vérification des données POST pour déterminer l'action à effectuer
-    if (decodedData.find("status=adding") != string::npos)         // Si la requête est de type adding
+    // Check the POST data to determine the action to be taken
+    if (decodedData.find("status=login") != string::npos)         // If the request is of type login
+    {
+        // cout<< "<h2 class='error'>error:"<< decodedData<<" </h2>" << endl;
+        // if the login and password is in the data (decodedData format: status=login&name=login&password=password)
+        string login = decodedData.substr(18, decodedData.find("&password=") - 18);
+        string password = decodedData.substr(decodedData.find("&password=") + 10);
+        // cout << login << " : " << password << endl;
+        if (session.isInTheData(login , password)) {
+            session.setSessionCookie("admin");
+        } else {
+            cout << "<h2 class='error'>error: Invalid login or password </h2>" << endl;
+        }
+    }
+    else if (decodedData.find("status=logout") != string::npos)         // If the request is of type logout
+    {
+        session.invalidateSession();
+        session.coutLogin();
+    }
+    else if (decodedData.find("status=adding") != string::npos)         // If the request is of type adding
     {
         form.printForm();
     }
-    else if (decodedData.find("status=long") != string::npos)                // Si la requête est de type long
+    else if (decodedData.find("status=long") != string::npos)                // If the request is of type long
     {
         form.printLongTable();
     } 
-    else if (decodedData.find("status=remove") != string::npos)         // Si la requête est de type remove
+    else if (decodedData.find("status=remove") != string::npos)         // If the request is of type remove
     {
         string lineRequest = form.formatString(decodedData);
         size_t pos = lineRequest.find("line=");
@@ -30,7 +51,7 @@ int main()
             form.printLongTable();
         }
     } 
-    else if (decodedData.find("status=editing") != string::npos)         // Si la requête est de type editing
+    else if (decodedData.find("status=editing") != string::npos)         // If the request is of type editing
     {
         string lineRequest = form.formatString(decodedData);
         size_t namePos = lineRequest.find("name=");
@@ -42,7 +63,7 @@ int main()
             form.printLongTable();
         }
     }
-    else if (decodedData.find("status=edit") != string::npos)         // Si la requête est de type edit
+    else if (decodedData.find("status=edit") != string::npos)         // If the request is of type edit
     {
         string lineRequest = form.formatString(decodedData);
         size_t pos = lineRequest.find("line=");
@@ -51,12 +72,12 @@ int main()
             form.modificationPage(line);
         }
     }
-    else if (decodedData.find("name=") != string::npos)                 // Si la requête est de type add
+    else if (decodedData.find("name=") != string::npos)                 
     {
         form.addData(decodedData);
         form.printShortTable();
     }
-    else                                                                // Si la requête est de type short
+    else if (decodedData.find("status=short") != string::npos)         // If the request is of type short
     {
         form.printShortTable();
     }

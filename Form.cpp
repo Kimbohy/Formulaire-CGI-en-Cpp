@@ -94,7 +94,7 @@ void Form::printLongTable()
     ifstream file("data.txt");
     if (!file.is_open()) 
     {
-        cerr << "<h2 class='erreur'>Erreur: Can't open data.txt</h2>" << endl;
+        cerr << "<h2 class='error'>error: Can't open data.txt</h2>" << endl;
         return;
     }
 
@@ -130,7 +130,7 @@ void Form::printShortTable()
     ifstream file2("data.txt");
     if (!file2.is_open()) 
     {
-        cerr << "<h2 class='erreur'>Erreur: Can't open data.txt</h2>" << endl;
+        cerr << "<h2 class='error'>error: Can't open data.txt</h2>" << endl;
         return;
     }
 
@@ -209,7 +209,7 @@ void Form::printForm()
 
 Form::Form()
 {
-    cout << "Content-type: text/html; charset=utf-8\n\n";
+    // cout << "Content-type: text/html; charset=utf-8\n\n";
     cout << "<html><head><title>Form</title>";
     cout << "<link rel='stylesheet' href='style.css'></head><body>";
 }
@@ -228,7 +228,7 @@ void Form::removeLine(const string& sline)
 {
     ifstream inputFile("data.txt"); // Fichier d'entrée
     if (!inputFile.is_open()) {
-        cerr << "<h2 class='erreur'>Erreur: Can't open data.txt " << "data.txt </h2>" << endl;
+        cerr << "<h2 class='error'>error: Can't open data.txt " << "data.txt </h2>" << endl;
         return;
     }
 
@@ -251,7 +251,7 @@ void Form::removeLine(const string& sline)
     ofstream outputFile("data.txt");
     if (!outputFile.is_open()) 
     {
-        cerr << "<h2 class='erreur'>Erreur: Can't write in data.txt " << "data.txt </h2>" << endl;
+        cerr << "<h2 class='error'>error: Can't write in data.txt " << "data.txt </h2>" << endl;
         return;
     }
 
@@ -266,7 +266,7 @@ void Form::removeLine(const string& sline)
 
 void Form::printWarningEmptySection()
 {
-    cout << "<h2 class='erreur'>Warning: Empty cell added </h2>" << endl;
+    cout << "<h2 class='error'>Warning: Empty cell added </h2>" << endl;
 }
 
 
@@ -293,7 +293,7 @@ void Form::addData(const string& sline)
     vector<string> data = formatData(sline);
 
     if (data.size() < 5) {
-        cout << "<h2 class='erreur'>Erreur: Incomplete data </h2>" << endl;
+        cout << "<h2 class='error'>error: Incomplete data </h2>" << endl;
         return;
     }
 
@@ -304,23 +304,23 @@ void Form::addData(const string& sline)
     string email = formatString(data[4]);
 
     if (!isValidName(name)) {
-        cout << "<h2 class='erreur'>Erreur: Invalid name </h2>" << endl;
+        cout << "<h2 class='error'>error: Invalid name </h2>" << endl;
         return;
     }
     if (!isValidAge(age)) {
-        cout << "<h2 class='erreur'>Erreur: Invalid age </h2>" << endl;
+        cout << "<h2 class='error'>error: Invalid age </h2>" << endl;
         return;
     }
     if (city.empty()) {
-        cout << "<h2 class='erreur'>Erreur: City is required </h2>" << endl;
+        cout << "<h2 class='error'>error: City is required </h2>" << endl;
         return;
     }
     if (country.empty()) {
-        cout << "<h2 class='erreur'>Erreur: Country is required </h2>" << endl;
+        cout << "<h2 class='error'>error: Country is required </h2>" << endl;
         return;
     }
     if (!isValidEmail(email)) {
-        cout << "<h2 class='erreur'>Erreur: Invalid email format </h2>" << endl;
+        cout << "<h2 class='error'>error: Invalid email format </h2>" << endl;
         return;
     }
 
@@ -332,7 +332,7 @@ void Form::addData(const string& sline)
     while (getline(file, line)) {
         if (line.find(sline) != string::npos) {
             found = true;
-            cout << "<h2 class='erreur'>Erreur: Line already exists </h2>" << endl;
+            cout << "<h2 class='error'>error: Line already exists </h2>" << endl;
             break;
         }
     }
@@ -344,7 +344,7 @@ void Form::addData(const string& sline)
             file2 << sline << endl;
             file2.close();
         } else {
-            cout << "<h2 class='erreur'>Erreur: Can't write in data.txt </h2>" << endl;
+            cout << "<h2 class='error'>error: Can't write in data.txt </h2>" << endl;
         }
     }
 }
@@ -412,7 +412,7 @@ void Form::modifyData(const string& sline, const string& newLine)
     vector<string> data = formatData(newLine);
 
     if (data.size() < 5) {
-        cout << "<h2 class='erreur'>Erreur: Incomplete data </h2>" << endl;
+        cout << "<h2 class='error'>error: Incomplete data </h2>" << endl;
         return;
     }
 
@@ -424,28 +424,28 @@ void Form::modifyData(const string& sline, const string& newLine)
 
 
     if (!isValidName(name)) {
-        cout << "<h2 class='erreur'>Erreur: Invalid name </h2>" << endl;
+        cout << "<h2 class='error'>error: Invalid name </h2>" << endl;
         return;
     }
     if (!isValidAge(age)) {
-        cout << "<h2 class='erreur'>Erreur: Invalid age </h2>" << endl;
+        cout << "<h2 class='error'>error: Invalid age </h2>" << endl;
         return;
     }
     if (city.empty()) {
-        cout << "<h2 class='erreur'>Erreur: City is required </h2>" << endl;
+        cout << "<h2 class='error'>error: City is required </h2>" << endl;
         return;
     }
     if (country.empty()) {
-        cout << "<h2 class='erreur'>Erreur: Country is required </h2>" << endl;
+        cout << "<h2 class='error'>error: Country is required </h2>" << endl;
         return;
     }
     if (!isValidEmail(email)) {
-        cout << "<h2 class='erreur'>Erreur: Invalid email format </h2>" << endl;
+        cout << "<h2 class='error'>error: Invalid email format </h2>" << endl;
         return;
     }
 
     if (newLine.size() == 32) {
-        cout << "<h2 class='erreur'>Erreur: Les données sont vide </h2>" << endl;
+        cout << "<h2 class='error'>error: Les données sont vide </h2>" << endl;
         return;
     }
     else if (newLine.find("=&") != string::npos)
@@ -467,7 +467,7 @@ void Form::modifyData(const string& sline, const string& newLine)
 
     if (!found) 
     {
-        cout << "<h2 class='erreur'>Erreur: Line not found </h2>" << endl;
+        cout << "<h2 class='error'>error: Line not found </h2>" << endl;
         return;
     }
     else {
@@ -483,7 +483,7 @@ void Form::modifyData(const string& sline, const string& newLine)
     } 
     else 
     {
-        cout << "<h2 class='erreur'>Erreur: Can't write in data.txt </h2>" << endl;
+        cout << "<h2 class='error'>error: Can't write in data.txt </h2>" << endl;
     }
     }
 }
