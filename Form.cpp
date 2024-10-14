@@ -126,6 +126,7 @@ void Form::printLongTable()
 
 void Form::printShortTable() 
 {
+    int count = 0;
     ifstream file2("data.txt");
     if (!file2.is_open()) 
     {
@@ -142,6 +143,12 @@ void Form::printShortTable()
         cout << "<tr class='data-row'>";
         printShortFormattedLine(line);
         cout << "</tr>";
+        count++;
+    }
+    if (count == 0)
+    {
+        cout << "<td class='data-cell'>" << "-" << "</td>"; // Nom
+        cout << "<td class='data-cell'>" << "-" << "</td>"; // Pays
     }
     cout << "</table>";
     

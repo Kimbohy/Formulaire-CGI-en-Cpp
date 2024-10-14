@@ -1,4 +1,4 @@
-#include "./Form.hpp"
+#include "Form.hpp"
 
 using namespace std;
 
@@ -23,24 +23,33 @@ int main()
     else if (decodedData.find("status=remove") != string::npos)         // Si la requête est de type remove
     {
         string lineRequest = form.formatString(decodedData);
-        string line = lineRequest.substr(lineRequest.find("line=") + 5);
-        form.removeLine(line);
-        form.printLongTable();
+        size_t pos = lineRequest.find("line=");
+        if (pos != string::npos) {
+            string line = lineRequest.substr(pos + 5);
+            form.removeLine(line);
+            form.printLongTable();
+        }
     } 
-    else if (decodedData.find("status=edditing") != string::npos)         // Si la requête est de type edditing
+    else if (decodedData.find("status=editing") != string::npos)         // Si la requête est de type editing
     {
         string lineRequest = form.formatString(decodedData);
-        string newLine = lineRequest.substr(lineRequest.find("name="),lineRequest.find("line=")-10);
-        string line = lineRequest.substr(lineRequest.find("line=") + 5);
-
-        form.modifyData(line, newLine);
-        form.printLongTable();
+        size_t namePos = lineRequest.find("name=");
+        size_t linePos = lineRequest.find("line=");
+        if (namePos != string::npos && linePos != string::npos) {
+            string newLine = lineRequest.substr(namePos, linePos - namePos - 1);
+            string line = lineRequest.substr(linePos + 5);
+            form.modifyData(line, newLine);
+            form.printLongTable();
+        }
     }
-    else if (decodedData.find("status=eddit") != string::npos)         // Si la requête est de type eddit
+    else if (decodedData.find("status=edit") != string::npos)         // Si la requête est de type edit
     {
         string lineRequest = form.formatString(decodedData);
-        string line = lineRequest.substr(lineRequest.find("line=") + 5);
-        form.modificationPage(line);
+        size_t pos = lineRequest.find("line=");
+        if (pos != string::npos) {
+            string line = lineRequest.substr(pos + 5);
+            form.modificationPage(line);
+        }
     }
     else if (decodedData.find("name=") != string::npos)                 // Si la requête est de type add
     {
@@ -54,4 +63,3 @@ int main()
 
     return 0;
 }
- 
