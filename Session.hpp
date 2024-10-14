@@ -28,9 +28,6 @@ public:
     // Invalidate the session by removing the cookie
     void invalidateSession();
 
-    // Check if session is valid
-    bool isValidSession();
-
     void coutLogin();
 
     void coutLogout();

@@ -30,8 +30,8 @@ bool Session::hasCookie(const std::string& cookieName) {
 // Set a session cookie with the specified value
 void Session::setSessionCookie(const std::string& value) {
     sessionValue = value;
-    std::cout << "Content-Type: text/html\r\n";
     std::cout << "Set-Cookie: " << cookieName << "=" << sessionValue << "; HttpOnly; Path=/\r\n\r\n";
+    std::cout << "Content-Type: text/html\r\n\r\n";
 }
 
 // Retrieve session cookie from the request (if exists)
@@ -48,13 +48,9 @@ void Session::invalidateSession() {
     std::cout << "Set-Cookie: " << cookieName << "=; HttpOnly; Path=/; Max-Age=0\r\n";
 }
 
-// Check if session is valid
-bool Session::isValidSession() {
-    return !sessionValue.empty();
-}
-
 // method to cout a form for the login
 void Session::coutLogin(){
+    // std::cout << "Content-type: text/html; charset=utf-8\n\n";
     std::cout<< "<form action='index.cgi' method='post' class='add-form'>";
     std::cout<< "<input type='hidden' name='status' value='login'>";
     std::cout<< "<div class='form-group'>";
@@ -97,7 +93,7 @@ Session::Session(const std::string& name){
     cookieName = name;
     sessionValue = "";
     // if the session is already set in the cookie, we keep it
-    if (isValidSession()) {
+    if (hasCookie(cookieName)) {
         setSessionCookie(sessionValue);
     } else {
         this->coutLogin();

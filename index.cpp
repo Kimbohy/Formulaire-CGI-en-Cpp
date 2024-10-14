@@ -5,7 +5,6 @@ using namespace std;
 
 int main()
 {
-    cout << "Content-type: text/html; charset=utf-8\n\n";
     Session session("admin");
     Form form;
     string postData;
