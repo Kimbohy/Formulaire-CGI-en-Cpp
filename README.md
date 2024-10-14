@@ -34,16 +34,16 @@ Ce projet implémente un formulaire de traitement de données en utilisant le la
 2. Compilez le projet en utilisant un compilateur C++:
 
     ```bash
-    g++ -o index.cgi main.cpp Form.cpp
+    ./build.sh
     ```
 
-3. Assurez-vous que le fichier exécutable `index.cgi` a les permissions appropriées pour être exécuté par le serveur web:
+3. Assurez-vous que les fichiers exécutables `*.cgi` ont les permissions appropriées pour être exécuté par le serveur web:
 
     ```bash
-    chmod +x index.cgi
+    chmod +x *.cgi
     ```
 
-4. Placez `index.cgi` et les autres fichiers nécessaires (comme `data.txt` s'il existe) dans le répertoire CGI de votre serveur HTTP.
+4. Placez `index.cgi`, `*.cgi` et les autres fichiers nécessaires (comme `data.txt` s'il existe) dans le répertoire CGI de votre serveur HTTP.
 
 ## Utilisation
 
