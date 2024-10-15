@@ -1,38 +1,25 @@
-#ifndef SESSION_H
-#define SESSION_H
+#ifndef SESSION_HPP
+#define SESSION_HPP
 
-#include <iostream>
 #include <string>
-#include <cstdlib>
+#include <iostream>
 #include <fstream>
-#include <map>
 
+#include "User.hpp"
+
+using namespace std;
+
+// Session class
 class Session {
 private:
-    std::string cookieName;
-    std::string sessionValue;
+    User user;
 
 public:
-    Session(const std::string& name);
+    Session(User user) : user(user) {}
 
-    std::string getCookieValue(const std::string &cookieName);
+    string getUsername() { return user.getUsername(); }
 
-    bool hasCookie(const std::string &cookieName);
-
-    // Set a session cookie with the specified value
-    void setSessionCookie(const std::string& value);
-
-    // Retrieve session cookie from the request (if exists)
-    std::string getSessionCookie();
-
-    // Invalidate the session by removing the cookie
-    void invalidateSession();
-
-    void coutLogin();
-
-    void coutLogout();
-
-    bool isInTheData(const std::string login, const std::string password);
+    bool isValid() { return user.isValidPassword(); } 
 };
 
 #endif
